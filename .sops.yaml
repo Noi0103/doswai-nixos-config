@@ -1,0 +1,9 @@
+keys:
+  - &standalone <agekey>
+  - &doswai <agekey>
+creation_rules:
+  - path_reges: secrets/doswai.yaml$
+    keygroups:
+    - age:
+      - *standalone
+      - *doswai
