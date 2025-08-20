@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "nixos-config for doswai infrastructure";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";

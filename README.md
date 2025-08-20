@@ -1,2 +1,2 @@
-# nixos-config-doswai
+# doswai-nixos-config
 nixos configuration for doswai infrastructure
