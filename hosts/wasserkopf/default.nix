@@ -56,6 +56,7 @@
     validateSopsFiles = false;
 
     secrets = {
+      "alice-wasserkopf".neededForUsers = true;
       "noi-wasserkopf".neededForUsers = true;
       "nextcloud-admin-init" = { };
     };
@@ -75,6 +76,7 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMYKYFgQUbNK3skwgINa74dKQOa++PcukxFmlRWdhNxw paul"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKPKCP2alzmKEfPdXglFbTwo3SaBZ9ihoFKAiQZumwuq noi"
     ];
+    hashedPasswordFile = config.sops.secrets."alice-wasserkopf".path;
   };
   users.users.noi = {
     isNormalUser = true;
