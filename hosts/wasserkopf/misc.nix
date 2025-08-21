@@ -13,7 +13,7 @@
     btop
     lm_sensors
     age
-    neofetch
+    fastfetch
     smartmontools
   ];
 }

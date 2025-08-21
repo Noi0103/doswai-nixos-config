@@ -1,9 +1,11 @@
 keys:
-  - &standalone <agekey>
-  - &doswai <agekey>
+  - &noi age1cdsvgyw0s7x533v5hw470ys3wl93k08emt35pqh4h722fr2uqv7s2saanv
+  - &standalone age1c7m7lvrqp28hqw8aklsfhvt45gvfnmvac44l5n7msdlxrtkz956su4gecv
+  - &doswai age17mpv0uuv9mmqsxtwjev3p8urs6m0sszfr4rswgtsssp9l5nl74kq9g2pwp
 creation_rules:
-  - path_reges: secrets/doswai.yaml$
-    keygroups:
+  - path_reges: secrets/wasserkopf.yaml$
+    key_groups:
     - age:
+      - *noi
       - *standalone
       - *doswai

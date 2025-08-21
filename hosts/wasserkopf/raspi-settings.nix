@@ -5,10 +5,15 @@
   ...
 }:
 {
+  # sections from here are copied from the wiki and a c3d2 config template i once received
+  # https://wiki.nixos.org/wiki/NixOS_on_ARM/Raspberry_Pi_4
+
   hardware.enableRedistributableFirmware = true;
+
+  # do not log to sd flash storage
   services.journald.extraConfig = ''
     Storage=volatile
-  ''; # Do not log to sd flash storage:
+  '';
   zramSwap = {
     enable = true;
   };

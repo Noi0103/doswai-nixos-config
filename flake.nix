@@ -28,12 +28,12 @@
     in
     {
       nixosConfigurations = {
-        doswai = nixpkgs.lib.nixosSystem {
+        wasserkopf = nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit inputs;
           };
           modules = [
-            ./hosts/doswai
+            ./hosts/wasserkopf
             sops-nix.nixosModules.sops
           ];
         };
@@ -47,6 +47,8 @@
         ];
       };
 
+      # check config without making changes `nix flake check`
+      # check config and change formatting `nix develop -c pre-commit run --all-files`
       checks = forAllSystems (system: {
         pre-commit-check = pre-commit-hooks.lib.${system}.run {
           src = ./.;
