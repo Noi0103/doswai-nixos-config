@@ -5,8 +5,8 @@
   ...
 }:
 let
-  domain = "doswai.com";
   maxUploadSize = "5G";
+  domain = "doswai.com";
 in
 {
   # services excludes openssh and fail2ban
@@ -32,9 +32,15 @@ in
       enableACME = true;
       root = "/var/www/${domain}";
     };
-    virtualHosts."cloud.${domain}" = {
+    virtualHosts."${config.services.nextcloud.hostName}" = {
       forceSSL = true;
       enableACME = true;
+      # nextcloud module configures this virtualHost
+    };
+    virtualHosts."${config.services.gitlab.host}" = {
+      forceSSL = true;
+      enableACME = true;
+      locations."/".proxyPass = "http://127.0.0.1:8080";
     };
   };
   networking.firewall.allowedTCPPorts = [
@@ -45,17 +51,18 @@ in
   # letsencrypt certificate
   security.acme = {
     acceptTerms = true;
+    # TODO
     defaults.email = ""; # notification when cert threatens to expire
   };
 
   ## nextcloud
   services.nextcloud = {
-    enable = true;
+    enable = false;
     package = pkgs.nextcloud31;
     https = true;
-    hostName = "cloud.${domain}";
+    hostName = "cloud.doswai.com";
     settings = {
-      trusted_domain = [ "cloud.${domain}" ];
+      trusted_domain = [ "${config.services.nextcloud.hostName}" ];
       trusted_proxies = [ "127.0.0.1" ];
     };
 
@@ -79,7 +86,19 @@ in
 
   ## gitlab
   services.gitlab = {
+    enable = false;
     port = 8080;
-    # TODO
+    statePath = "/var/gitlab/state";
+    initialRootEmail = "alice@local.host";
+    initialRootPasswordFile = config.sops.secrets."gitlab-admin-init".path;
+    host = "git.${domain}";
+    databaseCreateLocally = true;
+    # https://docs.gitlab.com/administration/backup_restore/backup_gitlab/
+    backup = {
+      startAt = "03:00";
+      skip = [ "artifacts" ];
+      path = /mnt/backup;
+      keepTime = 24 * 7;
+    };
   };
 }

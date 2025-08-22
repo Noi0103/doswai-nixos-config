@@ -5,12 +5,9 @@
   ...
 }:
 {
-  # TODO set paths
-  # nextcloud folders
-  # nextcloud database
+  # TODO
   # nginx website
-  # gitlab folders
-  # gitlab database
+  # is this in a git repo so i dont have to backup from the server itself?
 
   # nextcloud
   systemd.timers."backup-routine-nextcloud" = {
@@ -26,6 +23,7 @@
     script = ''
       set -eu
       nextcloud-occ maintenance:mode --on
+      mkdir -p /mnt/backup/nextcloud/home
     '';
     serviceConfig = {
       Type = "oneshot";
@@ -37,8 +35,8 @@
   # nextcloud dir rsync
   systemd.services."backup-nextcloud-files" = {
     script = ''
-      set -eu  
-      rsync --delete-after -Aavx /mnt/main/nextcloud /mnt/backup/nextcloud
+      set -eu
+      rsync --delete-after -Aavx /mnt/operation/nextcloud/home /mnt/backup/nextcloud/home
     '';
     serviceConfig = {
       Type = "oneshot";
@@ -48,7 +46,7 @@
     path = [ pkgs.rsync ];
   };
   # databse dump
-  systemd.services."backup-nextcloud-database" = {
+  systemd.services."backup-nextcloud-create-pg_dump" = {
     script = ''
       set -eu  
       pg_dump nextcloud -U postgres -f /var/lib/postgresql/nextcloud-database.sql
@@ -63,8 +61,8 @@
   # moving dump into backup folder
   systemd.services."backup-nextcloud-mv-pg_dump" = {
     script = ''
-      set -eu  
-      mv /var/lib/postgresql/nextcloud-database.sql /mnt/wd5/WD5/100-Backup/140-Nextcloud/nextcloud-database.sql
+      set -eu
+      mv /var/lib/postgresql/nextcloud-database.sql /mnt/backup/nextcloud/database.sql
     '';
     serviceConfig = {
       Type = "oneshot";
@@ -85,15 +83,4 @@
     };
     path = [ config.services.nextcloud.occ ];
   };
-
-  # gitlab
-  systemd.timers."backup-routine-gitlab" = {
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      Unit = "<gitlab maintenance mode>.service";
-      OnCalendar = "Tue *-*-* 23:59:00";
-      Persistent = true;
-    };
-  };
-
 }

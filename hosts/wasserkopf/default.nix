@@ -9,6 +9,7 @@
     ./hardware.nix
     ./misc.nix
     ./raspi-settings.nix
+    ./services.nix
   ];
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)

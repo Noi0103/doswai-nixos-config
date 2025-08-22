@@ -35,6 +35,10 @@
           modules = [
             ./hosts/wasserkopf
             sops-nix.nixosModules.sops
+            #"${nixpkgs}/nixos/modules/installer/sd-card/sd-image-raspberrypi.nix"
+            #{
+            #  config.sdImage.compressImage=false;
+            #}
           ];
         };
       };
