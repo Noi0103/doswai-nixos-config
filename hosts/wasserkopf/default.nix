@@ -21,22 +21,24 @@
   networking.hostName = "wasserkopf";
 
   # sd card should be nixos only and stateful data should reside on another blockdevice
-  #fileSystems."/mnt/operation" = {
-  #  device = "/dev/disk/by-uuid/<uuid>";
-  #  fsType = "ext4";
-  #  options = [
-  #    "nofail"
-  #    "users"
-  #  ];
-  #};
-  #fileSystems."/mnt/backup" = {
-  #  device = "/dev/disk/by-uuid/<uuid>";
-  #  fsType = "ext4";
-  #  options = [
-  #    "nofail"
-  #    "users"
-  #  ];
-  #};
+  # rot
+  fileSystems."/mnt/operation" = {
+    device = "/dev/disk/by-uuid/12a0dce8-8085-4ab4-b808-623cad281a6e";
+    fsType = "ext4";
+    options = [
+      "nofail"
+      "users"
+    ];
+  };
+  # gelb
+  fileSystems."/mnt/backup" = {
+    device = "/dev/disk/by-uuid/297e3c02-2a6f-40dd-9671-71b5e6185f2e";
+    fsType = "ext4";
+    options = [
+      "nofail"
+      "users"
+    ];
+  };
 
   # these were still installed i left this even though it can be deleted as the most important
   # packages (for myself anyways) are provided in misc.nix

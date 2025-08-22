@@ -33,6 +33,7 @@ when the sd card eventually dies the setup steps will be the same: install nixos
 - if some path are missing when deploying run `nix flake check` (usually used to run lint tests, integration tests, ... but it will also evaluate the config and find syntax errors) (https://nix.dev/manual/nix/2.28/command-ref/new-cli/nix3-flake-check)
 
 # other sources
+https://ayats.org/blog/nix-workflow#flake
 https://nixos.org/manual/nixos/stable/
 https://nix.dev/
 https://nixos-and-flakes.thiscute.world/introduction/

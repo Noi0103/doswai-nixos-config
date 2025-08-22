@@ -6,14 +6,16 @@
 }:
 let
   maxUploadSize = "5G";
-  domain = "doswai.com";
+  domain = "dummkopf.crabdance.com";
+  statefulDir = "/mnt/operation";
+  backupDir = "/mnt/backup";
 in
 {
   # services excludes openssh and fail2ban
 
   ## webserver and proxy
   services.nginx = {
-    enable = false;
+    enable = true;
 
     recommendedGzipSettings = true;
     recommendedOptimisation = true;
@@ -23,25 +25,25 @@ in
     clientMaxBodySize = "${maxUploadSize}"; # when uploading large files on nextcloud
 
     virtualHosts."${domain}" = {
-      forceSSL = false;
-      enableACME = false;
-      globalRedirect = "www.${domain}";
-    };
-    virtualHosts."www.${domain}" = {
       forceSSL = true;
       enableACME = true;
-      root = "/var/www/${domain}";
+      locations."/".return = "200";
     };
-    virtualHosts."${config.services.nextcloud.hostName}" = {
-      forceSSL = true;
-      enableACME = true;
-      # nextcloud module configures this virtualHost
-    };
-    virtualHosts."${config.services.gitlab.host}" = {
-      forceSSL = true;
-      enableACME = true;
-      locations."/".proxyPass = "http://127.0.0.1:8080";
-    };
+    #virtualHosts."www.${domain}" = {
+    #  forceSSL = false;
+    #  enableACME = false;
+    #  root = "/var/www/${domain}";
+    #};
+    #virtualHosts."${config.services.nextcloud.hostName}" = {
+    #  forceSSL = true;
+    #  enableACME = true;
+    # nextcloud module configures this virtualHost
+    #};
+    #virtualHosts."${config.services.gitlab.host}" = {
+    #  forceSSL = true;
+    #  enableACME = true;
+    #  locations."/".proxyPass = "http://127.0.0.1:8080";
+    #};
   };
   networking.firewall.allowedTCPPorts = [
     80 # nginx
@@ -51,8 +53,7 @@ in
   # letsencrypt certificate
   security.acme = {
     acceptTerms = true;
-    # TODO
-    defaults.email = ""; # notification when cert threatens to expire
+    defaults.email = "paul.dennis2@proton.me"; # notification when cert threatens to expire
   };
 
   ## nextcloud
@@ -60,13 +61,13 @@ in
     enable = false;
     package = pkgs.nextcloud31;
     https = true;
-    hostName = "cloud.doswai.com";
+    hostName = "cloud.${domain}";
     settings = {
       trusted_domain = [ "${config.services.nextcloud.hostName}" ];
       trusted_proxies = [ "127.0.0.1" ];
     };
 
-    home = "/path/to/datadir/nextcloud"; # create folder nextcloud >  chown it to nextcloud:nextcloud > chmod it to 777
+    home = "${statefulDir}/nextcloud"; # create folder nextcloud >  chown it to nextcloud:nextcloud > chmod it to 777
     maxUploadSize = "${maxUploadSize}"; # this is a per file and the other setting besides nginx clientMaxBodySize
 
     database.createLocally = true;
@@ -80,7 +81,7 @@ in
     autoUpdateApps.enable = true;
     autoUpdateApps.startAt = "05:00:00";
     extraApps = {
-      inherit (config.services.nextcloud.package.packages.apps) ; # contacts calendar tasks; # the default stuff can be expanded
+      inherit (config.services.nextcloud.package.packages.apps) calendar; # the default stuff can be expanded
     };
   };
 
@@ -88,7 +89,7 @@ in
   services.gitlab = {
     enable = false;
     port = 8080;
-    statePath = "/var/gitlab/state";
+    statePath = "${statefulDir}/gitlab";
     initialRootEmail = "alice@local.host";
     initialRootPasswordFile = config.sops.secrets."gitlab-admin-init".path;
     host = "git.${domain}";
