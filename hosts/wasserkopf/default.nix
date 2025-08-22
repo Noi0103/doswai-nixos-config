@@ -20,6 +20,7 @@
   # anounces this name to in the network
   networking.hostName = "wasserkopf";
 
+  # sd card should be nixos only and stateful data should reside on another blockdevice
   #fileSystems."/mnt/operation" = {
   #  device = "/dev/disk/by-uuid/<uuid>";
   #  fsType = "ext4";
@@ -100,7 +101,8 @@
     settings.PasswordAuthentication = false;
   };
 
-  # this is set rather extreme; wrongly configured nixos-rebuild will block long
+  # bantime increment factor might be unnecess high
+  # wrongly configured nixos-rebuild might block because it uses to multiple ssh connections and will trigger multiple failed logins
   services.fail2ban = {
     enable = true;
     bantime = "12h";
@@ -108,7 +110,7 @@
     bantime-increment.factor = "2";
   };
 
-  # optional: nix daemon prioritization
+  # very optional: nix daemon prioritization
   nix.daemonCPUSchedPolicy = "idle";
   nix.daemonIOSchedClass = "idle";
 
@@ -119,9 +121,14 @@
       "flakes"
     ];
     # auto garbadge collect on full storage
-    # this does not remove old links and will only last so far
+    # this does not remove old links and will only get you so far
+    # with the sd card size this should still last quite some time
+    # usually a full garbage collect is done for build machines etc
+    # i set this mainly to have less storage interactions (not a daily garbage collect)
+    # but still have a fallback if storage is nearly full and some stuff is currently building
     min-free = "5G";
     max-free = "25G";
+
     trusted-users = [
       "root"
       "@wheel"

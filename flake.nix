@@ -43,6 +43,7 @@
         };
       };
 
+      # the direnv shell addon to automatically activate devShells when entering the dir is nice to have
       devShells.${system}.default = pkgs.mkShell {
         inherit (self.checks.${system}.pre-commit-check) shellHook;
         buildInputs = self.checks.${system}.pre-commit-check.enabledPackages;

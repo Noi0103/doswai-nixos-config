@@ -1,3 +1,4 @@
+# public keys created or derived from ssh host keys to either edit or use secrets
 keys:
   - &noi age1cdsvgyw0s7x533v5hw470ys3wl93k08emt35pqh4h722fr2uqv7s2saanv
   - &standalone age1c7m7lvrqp28hqw8aklsfhvt45gvfnmvac44l5n7msdlxrtkz956su4gecv

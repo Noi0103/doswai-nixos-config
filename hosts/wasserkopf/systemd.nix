@@ -5,11 +5,12 @@
   ...
 }:
 {
-  # TODO
-  # nginx website
-  # is this in a git repo so i dont have to backup from the server itself?
+  # TODO nginx website files if not flake input via git repo
+  # TODO backend executable file if not flake input via git repo
 
   # nextcloud
+  # will alert the maintenance mode as on in the browser (or be unable to sync as client)
+  # if any part of this sequence failed, that will be the signal to action
   systemd.timers."backup-routine-nextcloud" = {
     wantedBy = [ "timers.target" ];
     timerConfig = {

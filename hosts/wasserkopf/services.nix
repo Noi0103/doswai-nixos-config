@@ -13,7 +13,7 @@ in
 
   ## webserver and proxy
   services.nginx = {
-    enable = true;
+    enable = false;
 
     recommendedGzipSettings = true;
     recommendedOptimisation = true;

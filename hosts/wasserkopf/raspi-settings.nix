@@ -14,6 +14,8 @@
   services.journald.extraConfig = ''
     Storage=volatile
   '';
+
+  # 4GB is not much and large fileuploads might be an issue (e.g. services.nextcloud.maxUploadSize)
   zramSwap = {
     enable = true;
   };
