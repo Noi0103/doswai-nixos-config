@@ -7,6 +7,9 @@
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     pre-commit-hooks.url = "github:cachix/git-hooks.nix";
+
+    doswai-frontend.url = "git+ssh://git@github.com/Noi0103/doswai-frontend";
+    doswai-backend.url = "git+ssh://git@github.com/Noi0103/doswai-backend";
   };
 
   outputs =
@@ -16,6 +19,8 @@
       nixos-hardware,
       sops-nix,
       pre-commit-hooks,
+      doswai-frontend,
+      doswai-backend,
     }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.${system};
@@ -35,10 +40,15 @@
           modules = [
             ./hosts/wasserkopf
             sops-nix.nixosModules.sops
-            #"${nixpkgs}/nixos/modules/installer/sd-card/sd-image-raspberrypi.nix"
-            #{
-            #  config.sdImage.compressImage=false;
-            #}
+            doswai-backend.nixosModules.backend
+            {
+              services.backend = {
+                enable = true;
+                port = 20001;
+                socket-ip = "0.0.0.0";
+                openFirewall = false;
+              };
+            }
           ];
         };
       };

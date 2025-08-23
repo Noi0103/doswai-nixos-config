@@ -1,4 +1,5 @@
 {
+  inputs,
   config,
   pkgs,
   lib,
@@ -27,7 +28,8 @@ in
     virtualHosts."${domain}" = {
       forceSSL = true;
       enableACME = true;
-      locations."/".return = "200";
+      root = "${inputs.doswai-frontend.packages."x86_64-linux".frontend}/";
+      locations."/test".return = "200";
     };
     #virtualHosts."www.${domain}" = {
     #  forceSSL = false;
