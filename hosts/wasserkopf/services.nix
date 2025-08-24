@@ -31,6 +31,11 @@ in
       root = "${inputs.doswai-frontend.packages."x86_64-linux".frontend}/";
       locations."/test".return = "200";
     };
+    virtualHosts."cybernetic.crabdance.com" = {
+      forceSSL = true;
+      enableACME = true;
+      locations."/".proxyPass = "http://127.0.0.1:20001";
+    };
     #virtualHosts."www.${domain}" = {
     #  forceSSL = false;
     #  enableACME = false;
